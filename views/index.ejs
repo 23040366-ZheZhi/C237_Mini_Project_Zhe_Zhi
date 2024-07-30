@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Game Store App</title>
+</head>
+<body>
+
+  <%- include ('partials/navbar.ejs') %>
+
+  <div class="carousel-container">
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <% games.forEach((game, index) => { %>
+                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="<%= index %>" class="<%= index === 0 ? 'active' : '' %>" aria-current="<%= index === 0 ? 'true' : 'false' %>" aria-label="Slide <%= index + 1 %>"></button>
+            <% }) %>
+        </div>
+        <div class="carousel-inner">
+            <% games.forEach((game, index) => { %>
+                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                    <a href="/game/<%= game.gameId %>"><img src="/images/<%= game.image %>" class="d-block w-100 game-image" alt="<%= game.name %>"></a>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5><%= game.name %></h5>
+                        <p>Price: $<%= game.price %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<style>
+    .carousel-item {
+        height: 550px; 
+    }
+    .game-image {
+        width: 100%;
+        height: 100%;
+        object-fit: fit; 
+    }
+    .carousel-caption h5 {
+        color: gold; 
+        font-weight: bold;
+        background-color: black;
+    }
+</style>
+
+
+  <div class="container">
+    <br>
+    <div class="text-center"><h2>Game Store App</h2></div>
+    <br>
+  
+    <% for(let i = 0; i < games.length; i++) { %>
+      <div class="card mb-3">
+        <div class="card-header text-center">
+          <h4><a href="/game/<%= games[i].gameId %>"><%= games[i].name %></a></h4>
+          <p>Click name to see more</p>
+        </div>
+        <table class="table table-hover small text-center">
+          <thead>
+            <tr>
+              <th width="100">Image</th>
+              <th width="50">Price</th>
+              <th width="50">Description</th>
+              <th width="50">Edit</th>
+              <th width="50">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="/images/<%= games[i].image %>" width="100%"></td>
+              <td>$<%= games[i].price %></td>
+              <td class="description"><%= games[i].description %></td>
+              <td><a class="btn btn-primary" href="/updateGame/<%= games[i].gameId %>">Edit</a></td>
+              <td><a class="btn btn-primary" href="/deleteGame/<%= games[i].gameId %>" onclick="return confirm('Do you wish to delete this game?')">Delete</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <form action="/add-to-cart" method="POST">
+          <input type="hidden" name="gameId" value="<%= games[i].gameId %>">
+          <button type="submit" class="btn btn-primary">Add to Cart</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+  <!-- ChatGPT was used for the code below -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const descriptions = document.querySelectorAll('.description');
+      descriptions.forEach(description => {
+        const maxLength = 100;
+        if (description.textContent.length > maxLength) {
+          const truncated = description.textContent.substring(0, maxLength) + '...';
+          description.textContent = truncated;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
