@@ -25,9 +25,9 @@ const upload = multer({ storage: storage });
 
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
+    host: 'db4free.net',
+    user: 'zzsquare',
+    password: 'goodboi69',
     database: 'gamelist'
 });
 
